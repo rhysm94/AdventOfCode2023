@@ -8,17 +8,16 @@
 import Foundation
 
 public func part1(calibrationValues: some Collection<some StringProtocol>) -> Int {
-  func firstNumber(from value: some Collection<Character>) -> String? {
-    value.drop(while: { !$0.isNumber }).first.flatMap {
-      String($0)
-    }
+  func allNumbers(from value: some StringProtocol) -> [Int] {
+    value.filter { $0.isNumber }.compactMap { Int(String($0)) }
   }
 
   return calibrationValues
     .reduce(0) { acc, next in
+      let numbers = allNumbers(from: next)
       guard
-        let firstValue = firstNumber(from: next),
-        let lastValue = firstNumber(from: next.reversed()),
+        let firstValue = numbers.first,
+        let lastValue = numbers.last,
         let number = Int("\(firstValue)\(lastValue)")
       else {
         return acc
