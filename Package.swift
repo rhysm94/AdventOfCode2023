@@ -11,6 +11,10 @@ let package = Package(
       name: "AdventOfCode2023",
       targets: ["AdventOfCode2023"]
     ),
+    .executable(
+      name: "Day1",
+      targets: ["Day1"]
+    )
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -18,9 +22,11 @@ let package = Package(
     .executableTarget(
       name: "AdventOfCode2023"
     ),
-    .testTarget(
-      name: "AdventOfCode2023Tests",
-      dependencies: ["AdventOfCode2023"]
-    ),
+    .executableTarget(
+      name: "Day1",
+      resources: [
+        .copy("input.txt")
+      ]
+    )
   ]
 )
