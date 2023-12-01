@@ -4,20 +4,23 @@
 import PackageDescription
 
 let package = Package(
-    name: "AdventOfCode2023",
-    products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "AdventOfCode2023",
-            targets: ["AdventOfCode2023"]),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "AdventOfCode2023"),
-        .testTarget(
-            name: "AdventOfCode2023Tests",
-            dependencies: ["AdventOfCode2023"]),
-    ]
+  name: "AdventOfCode2023",
+  products: [
+    // Products define the executables and libraries a package produces, making them visible to other packages.
+    .executable(
+      name: "AdventOfCode2023",
+      targets: ["AdventOfCode2023"]
+    ),
+  ],
+  targets: [
+    // Targets are the basic building blocks of a package, defining a module or a test suite.
+    // Targets can depend on other targets in this package and products from dependencies.
+    .executableTarget(
+      name: "AdventOfCode2023"
+    ),
+    .testTarget(
+      name: "AdventOfCode2023Tests",
+      dependencies: ["AdventOfCode2023"]
+    ),
+  ]
 )
