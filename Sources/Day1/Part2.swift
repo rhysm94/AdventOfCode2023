@@ -38,18 +38,11 @@ let regex = Capture {
 }
 
 func allNumbers(from value: String) -> [Int] {
-  var outputs: [Int] = []
-
-  var currentIndex = value.startIndex
-  while currentIndex != value.endIndex {
-    if let match = value[currentIndex ..< value.endIndex].prefixMatch(of: regex)?.output.1 {
-      outputs.append(match)
+  value.indices.reduce(into: []) { partialResult, nextIndex in
+    if let match = value[nextIndex ..< value.endIndex].prefixMatch(of: regex)?.output.1 {
+      partialResult.append(match)
     }
-
-    value.formIndex(after: &currentIndex)
   }
-
-  return outputs
 }
 
 public func part2(calibrationValues: some Collection<some StringProtocol>) -> Int {
