@@ -27,3 +27,11 @@ func totals(_ input: [Turn]) -> Totals {
       acc.blue += revelationCounts(revelations, cube: .blue)
     }
 }
+
+func isGameValid(turns: [Turn], maximum: Totals) -> Bool {
+  let totals = totals(turns)
+  let redValid = totals.red <= maximum.red
+  let greenValid = totals.green <= maximum.green
+  let blueValid = totals.blue <= maximum.blue
+  return redValid && greenValid && blueValid
+}
