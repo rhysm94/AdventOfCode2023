@@ -24,3 +24,17 @@ public struct Day1 {
     print("Part 2 results: \(part2Results)")
   }
 }
+
+func sumCalibrationValues(_ calibrationValues: some Collection<[Int]>) -> Int {
+  calibrationValues.reduce(0) { partialResult, next in
+    guard
+      let firstValue = next.first,
+      let lastValue = next.last,
+      let number = Int("\(firstValue)\(lastValue)")
+    else {
+      return partialResult
+    }
+
+    return partialResult + number
+  }
+}

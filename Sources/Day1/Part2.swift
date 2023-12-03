@@ -46,19 +46,9 @@ func allNumbers(from value: String) -> [Int] {
 }
 
 public func part2(calibrationValues: some Collection<some StringProtocol>) -> Int {
-  calibrationValues
-    .reduce(0) { acc, next in
-      let numbers = allNumbers(from: String(next))
-
-      guard
-        let firstValue = numbers.first,
-        let lastValue = numbers.last,
-        let number = Int("\(firstValue)\(lastValue)")
-      else {
-        return acc
-      }
-
-      return acc + number
-    }
+  sumCalibrationValues(
+    calibrationValues
+      .map { String($0) }
+      .map(allNumbers)
+  )
 }
-

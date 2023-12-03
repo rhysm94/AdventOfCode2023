@@ -12,17 +12,7 @@ public func part1(calibrationValues: some Collection<some StringProtocol>) -> In
     value.filter { $0.isNumber }.compactMap { Int(String($0)) }
   }
 
-  return calibrationValues
-    .reduce(0) { acc, next in
-      let numbers = allNumbers(from: next)
-      guard
-        let firstValue = numbers.first,
-        let lastValue = numbers.last,
-        let number = Int("\(firstValue)\(lastValue)")
-      else {
-        return acc
-      }
-
-      return acc + number
-    }
+  return sumCalibrationValues(
+    calibrationValues.map(allNumbers)
+  )
 }
