@@ -8,9 +8,19 @@
 import Foundation
 
 struct Totals: Equatable {
-  var red: Int = 0
-  var green: Int = 0
-  var blue: Int = 0
+  var red: Int
+  var green: Int
+  var blue: Int
+
+  static let zero = Self(red: 0, green: 0, blue: 0)
+
+  func total(for cube: Cube) -> Int {
+    switch cube {
+    case .red: red
+    case .blue: blue
+    case .green: green
+    }
+  }
 }
 
 func revelationCounts(_ revelations: Turn, cube: Cube) -> Int {
@@ -19,19 +29,30 @@ func revelationCounts(_ revelations: Turn, cube: Cube) -> Int {
     .reduce(0) { $0 + $1.count }
 }
 
-func totals(_ input: [Turn]) -> Totals {
-  input
-    .reduce(into: Totals()) { acc, revelations in
-      acc.red += revelationCounts(revelations, cube: .red)
-      acc.green += revelationCounts(revelations, cube: .green)
-      acc.blue += revelationCounts(revelations, cube: .blue)
+func isGameValid(game: Game, maximum: Totals) -> Bool {
+  game.turns
+    .reduce(true) { partialResult, revelations in
+      partialResult && revelations.reduce(true) { partialResult, revelation in
+        partialResult && revelationAllowed(revelation, maximum: maximum)
+      }
     }
 }
 
-func isGameValid(turns: [Turn], maximum: Totals) -> Bool {
-  let totals = totals(turns)
-  let redValid = totals.red <= maximum.red
-  let greenValid = totals.green <= maximum.green
-  let blueValid = totals.blue <= maximum.blue
-  return redValid && greenValid && blueValid
+func revelationAllowed(_ revelation: Revelation, maximum: Totals) -> Bool {
+
+  revelation.count <= maximum.total(for: revelation.cube)
+}
+
+extension Totals {
+  static let possible = Totals(red: 12, green: 13, blue: 14)
+}
+
+func part1(input: String) throws -> Int {
+  let games = try GamesParser().parse(input)
+
+  return games.lazy
+    .filter {
+      isGameValid(game: $0, maximum: .possible)
+    }
+    .reduce(0, { acc, game in acc + game.id })
 }

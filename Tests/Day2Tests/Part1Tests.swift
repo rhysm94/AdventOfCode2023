@@ -29,22 +29,24 @@ final class Part1Tests: XCTestCase {
 
   let sampleMaximum = Totals(red: 12, green: 13, blue: 15)
 
-  func testRevelationCounts() {
-    let expected = Totals(red: 5, green: 4, blue: 9)
-    let actual = totals(sampleGame.turns)
-
-    XCTAssertEqual(actual, expected)
-  }
-
   func testGameValid_ExpectedValid() {
-    let result = isGameValid(turns: sampleGame.turns, maximum: sampleMaximum)
+    let result = isGameValid(game: sampleGame, maximum: sampleMaximum)
     XCTAssertTrue(result)
   }
 
   func testGameValid_ExpectedInvalid() throws {
     let string = "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"
     let game = try GameParser().parse(string)
-    let result = isGameValid(turns: game.turns, maximum: sampleMaximum)
+    let result = isGameValid(game: game, maximum: sampleMaximum)
     XCTAssertFalse(result)
+  }
+
+  func testGameValid_ExpectedValid_AllInOneTurn() throws {
+    let string = "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"
+    let game = try GameParser().parse(string)
+    let maximum = Totals(red: 20, green: 13, blue: 6)
+    let result = isGameValid(game: game, maximum: maximum)
+
+    XCTAssertTrue(result)
   }
 }

@@ -76,3 +76,19 @@ struct GameParser: Parser {
     .map(Game.init)
   }
 }
+
+struct GamesParser: Parser {
+  var body: some Parser<Substring, [Game]> {
+    Many {
+      GameParser()
+    } separator: {
+      Whitespace()
+    }
+
+    Skip {
+      Optionally {
+        Whitespace()
+      }
+    }
+  }
+}
