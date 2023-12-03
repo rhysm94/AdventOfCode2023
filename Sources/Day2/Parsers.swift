@@ -36,9 +36,7 @@ struct RevelationParser: Parser {
   }
 }
 
-struct Turn: Equatable {
-  var revelations: [Revelation]
-}
+typealias Turn = [Revelation]
 
 struct TurnParser: Parser {
   var body: some Parser<Substring, Turn> {
@@ -48,25 +46,33 @@ struct TurnParser: Parser {
     } separator: {
       ","
     }
-    .map(Turn.init)
   }
 }
 
-struct Game {
+struct Game: Equatable {
   let id: Int
   let turns: [Turn]
 }
 
-//struct GameParser: Parser {
-//  var body: some Parser<Substring, Game> {
-//    Skip {
-//      "Game "
-//    }
-//
-//    Digits()
-//
-//    Skip {
-//      ": "
-//    }
-//  }
-//}
+struct GameParser: Parser {
+  var body: some Parser<Substring, Game> {
+    Parse {
+      Skip {
+        "Game "
+      }
+
+      Digits()
+
+      Skip {
+        ": "
+      }
+
+      Many {
+        TurnParser()
+      } separator: {
+        ";"
+      }
+    }
+    .map(Game.init)
+  }
+}
