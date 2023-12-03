@@ -43,7 +43,7 @@ struct Turn: Equatable {
 struct TurnParser: Parser {
   var body: some Parser<Substring, Turn> {
     Many {
-      Whitespace(...1, .horizontal)
+      Whitespace()
       RevelationParser()
     } separator: {
       ","

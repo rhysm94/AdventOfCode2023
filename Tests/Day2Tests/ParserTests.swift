@@ -22,4 +22,28 @@ final class ParserTests: XCTestCase {
 
     XCTAssertEqual(actual, expected)
   }
+
+  func testTurnParser() throws {
+    let expected = Turn(revelations: [
+      Revelation(count: 5, cube: .red),
+      Revelation(count: 10, cube: .green),
+      Revelation(count: 40, cube: .blue)
+    ])
+
+    let actual = try TurnParser().parse("5 red, 10 green, 40 blue")
+
+    XCTAssertEqual(actual, expected)
+  }
+
+  func testTurnParser_LeadingWhitespace() throws {
+    let expected = Turn(revelations: [
+      Revelation(count: 10, cube: .green),
+      Revelation(count: 1, cube: .blue),
+      Revelation(count: 90, cube: .red)
+    ])
+
+    let actual = try TurnParser().parse(" 10 green, 1 blue, 90 red")
+
+    XCTAssertEqual(actual, expected)
+  }
 }
