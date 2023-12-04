@@ -13,7 +13,14 @@ let package = Package(
     .executable(
       name: "Day1",
       targets: ["Day1"]
-    )
+    ),
+    .executable(
+      name: "Day2",
+      targets: ["Day2"]
+    ),
+  ],
+  dependencies: [
+    .package(url: "https://github.com/pointfreeco/swift-parsing", from: "0.13.0")
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -23,6 +30,19 @@ let package = Package(
       resources: [
         .copy("input.txt")
       ]
+    ),
+    .executableTarget(
+      name: "Day2",
+      dependencies: [
+        .product(name: "Parsing", package: "swift-parsing")
+      ],
+      resources: [
+        .copy("input.txt")
+      ]
+    ),
+    .testTarget(
+      name: "Day2Tests",
+      dependencies: ["Day2"]
     )
   ]
 )
