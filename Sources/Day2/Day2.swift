@@ -28,14 +28,7 @@ public struct Day2 {
     let part1Result = try part1(input: input)
     print("Part 1 Result: \(part1Result)")
 
-    let minimums = try minimums(
-      for: [
-        .init(count: 5, cube: .red),
-        .init(count: 6, cube: .red),
-        .init(count: 10, cube: .red),
-        .init(count: 900, cube: .red),
-      ]
-    )
-    print(minimums)
+    let part2Result = try part2(input: input)
+    print("Part 2 Result: \(part2Result)")
   }
 }

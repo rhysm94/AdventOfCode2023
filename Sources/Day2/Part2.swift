@@ -26,15 +26,27 @@ func total(for revelation: Revelation) -> Totals {
 }
 
 func minimums(for turn: Turn) -> Totals {
-  turn.reduce(Totals.zero) { partialResult, next in
+  turn.reduce(.zero) { partialResult, next in
     partialResult.merge(with: total(for: next))
   }
 }
 
+func minimums(for turns: [Turn]) -> Totals {
+  turns.reduce(.zero) { partialResult, revelations in
+    partialResult.merge(with: minimums(for: revelations))
+  }
+}
+
+func power(of totals: Totals) -> Int {
+  totals.red * totals.green * totals.blue
+}
+
 func part2(input: String) throws -> Int {
   let games = try GamesParser().parse(input)
-  let minimums = games.lazy
-    .map { game in
-      
-    }
+
+  return games.lazy
+    .map(\.turns)
+    .map(minimums(for:))
+    .map(power(of:))
+    .reduce(0, +)
 }
