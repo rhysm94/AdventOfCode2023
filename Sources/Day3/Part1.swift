@@ -39,46 +39,46 @@ func numberOccurrences(line: Array.Index, in string: String) -> [NumberOccurrenc
   return occurrences
 }
 
+func numberOccurrences(in strings: [String]) -> [NumberOccurrence] {
+  zip(strings.indices, strings).flatMap(numberOccurrences)
+}
+
 func part1(input: String) throws -> Int {
-  let split = input.split(separator: "\n").map(String.init)
-  let data = zip(split.indices, split)
-  let numberOccurrences = data.flatMap(numberOccurrences)
+  let split = input.split(separator: "\n").drop(while: \.isEmpty).map(String.init)
+  let numberOccurrences = numberOccurrences(in: split)
 
-  var partNumbers: [Int] = []
-  for numberOccurrence in numberOccurrences {
-    let line = split[numberOccurrence.line]
+  return numberOccurrences.reduce(into: [Int]()) { partNumbers, next in
+    let line = split[next.line]
 
-    let indexBefore = line.index(numberOccurrence.startIndex, offsetBy: -1, limitedBy: line.startIndex) ?? numberOccurrence.startIndex
-    let indexAfter = line.index(numberOccurrence.endIndex, offsetBy: 1, limitedBy: line.endIndex) ?? numberOccurrence.endIndex
+    let indexBefore = line.index(next.startIndex, offsetBy: -1, limitedBy: line.startIndex) ?? next.startIndex
+    let indexAfter = line.index(next.endIndex, offsetBy: 1, limitedBy: line.endIndex) ?? next.endIndex
 
     let range = indexBefore ..< indexAfter
 
     if line[range].contains(where: \.isDay3Symbol) {
-      partNumbers.append(numberOccurrence.number)
-      continue
+      partNumbers.append(next.number)
+      return
     }
 
-    if let splitBefore = split.index(numberOccurrence.line, offsetBy: -1, limitedBy: split.startIndex) {
+    if let splitBefore = split.index(next.line, offsetBy: -1, limitedBy: split.startIndex) {
       if split[splitBefore][range].contains(where: \.isDay3Symbol) {
-        partNumbers.append(numberOccurrence.number)
-        continue
+        partNumbers.append(next.number)
+        return
       }
     }
 
-    if let splitAfter = split.index(numberOccurrence.line, offsetBy: 1, limitedBy: split.endIndex) {
+    if let splitAfter = split.index(next.line, offsetBy: 1, limitedBy: split.endIndex) {
       guard split.indices.contains(splitAfter) else {
-        continue
+        return
       }
 
-      guard !split.isEmpty else { break }
       if split[splitAfter][range].contains(where: \.isDay3Symbol) {
-        partNumbers.append(numberOccurrence.number)
-        continue
+        partNumbers.append(next.number)
+        return
       }
     }
   }
-  
-  return partNumbers.reduce(0, +)
+  .reduce(0, +)
 }
 
 extension Character {
