@@ -45,40 +45,39 @@ func part1(input: String) throws -> Int {
   let numberOccurrences = data.flatMap(numberOccurrences)
 
   var partNumbers: [Int] = []
-numberLoop: for numberOccurrence in numberOccurrences {
-  let line = split[numberOccurrence.line]
+  for numberOccurrence in numberOccurrences {
+    let line = split[numberOccurrence.line]
 
-  let indexBefore = line.index(numberOccurrence.startIndex, offsetBy: -1, limitedBy: line.startIndex) ?? numberOccurrence.startIndex
+    let indexBefore = line.index(numberOccurrence.startIndex, offsetBy: -1, limitedBy: line.startIndex) ?? numberOccurrence.startIndex
+    let indexAfter = line.index(numberOccurrence.endIndex, offsetBy: 1, limitedBy: line.endIndex) ?? numberOccurrence.endIndex
 
-  let indexAfter = line.index(numberOccurrence.endIndex, offsetBy: 1, limitedBy: line.endIndex) ?? numberOccurrence.endIndex
+    let range = indexBefore ..< indexAfter
 
-  let range = indexBefore ..< indexAfter
-
-  if line[range].contains(where: \.isDay3Symbol) {
-    partNumbers.append(numberOccurrence.number)
-    continue numberLoop
-  }
-
-  if let splitBefore = split.index(numberOccurrence.line, offsetBy: -1, limitedBy: split.startIndex) {
-    if split[splitBefore][range].contains(where: \.isDay3Symbol) {
+    if line[range].contains(where: \.isDay3Symbol) {
       partNumbers.append(numberOccurrence.number)
-      continue numberLoop
+      continue
+    }
+
+    if let splitBefore = split.index(numberOccurrence.line, offsetBy: -1, limitedBy: split.startIndex) {
+      if split[splitBefore][range].contains(where: \.isDay3Symbol) {
+        partNumbers.append(numberOccurrence.number)
+        continue
+      }
+    }
+
+    if let splitAfter = split.index(numberOccurrence.line, offsetBy: 1, limitedBy: split.endIndex) {
+      guard split.indices.contains(splitAfter) else {
+        continue
+      }
+
+      guard !split.isEmpty else { break }
+      if split[splitAfter][range].contains(where: \.isDay3Symbol) {
+        partNumbers.append(numberOccurrence.number)
+        continue
+      }
     }
   }
-
-  if let splitAfter = split.index(numberOccurrence.line, offsetBy: 1, limitedBy: split.endIndex) {
-    guard split.indices.contains(splitAfter) else {
-      continue numberLoop
-    }
-
-    guard !split.isEmpty else { break }
-    if split[splitAfter][range].contains(where: \.isDay3Symbol) {
-      partNumbers.append(numberOccurrence.number)
-      continue numberLoop
-    }
-  }
-}
-
+  
   return partNumbers.reduce(0, +)
 }
 
