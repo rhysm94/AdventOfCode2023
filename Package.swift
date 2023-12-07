@@ -43,6 +43,15 @@ let package = Package(
     .testTarget(
       name: "Day2Tests",
       dependencies: ["Day2"]
-    )
+    ),
+    .executableTarget(
+      name: "Day3",
+      dependencies: [
+        .product(name: "Parsing", package: "swift-parsing")
+      ],
+      resources: [
+        .copy("input.txt")
+      ]
+    ),
   ]
 )
