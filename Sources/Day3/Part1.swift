@@ -44,7 +44,7 @@ func numberOccurrences(in strings: [String]) -> [NumberOccurrence] {
 }
 
 func part1(input: String) throws -> Int {
-  let split = input.split(separator: "\n").drop(while: \.isEmpty).map(String.init)
+  let split = input.split(separator: "\n").filter { !$0.isEmpty }.map(String.init)
   let numberOccurrences = numberOccurrences(in: split)
 
   return numberOccurrences.reduce(into: [Int]()) { partNumbers, next in
